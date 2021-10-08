@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.one.digitalinnovation.personapi.entity.Person;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PersonDTO {
     private String id;
     @NotNull @NotEmpty @Size(min = 3, max = 25)
@@ -28,19 +32,7 @@ public class PersonDTO {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate birthDate;
+    private List<PhoneDTO> phones;
 
-    public PersonDTO(Person person) {
-        this.id = person.getId();
-        this.firstName = person.getFirstName();
-        this.lastName = person.getLastName();
-        this.cpf = person.getCpf();
-        this.birthDate = person.getBirthDate();
-    }
 
-    public PersonDTO() {
-    }
-
-    public static List<PersonDTO> convertToDTO(List<Person> persons){
-        return persons.stream().map(PersonDTO::new).collect(Collectors.toList());
-    }
 }

@@ -1,38 +1,31 @@
 package com.one.digitalinnovation.personapi.entity;
 
 import com.one.digitalinnovation.personapi.dto.PersonDTO;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
-@Table
+@Data
+@Builder
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Person {
     @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
+    @Column(nullable = true)
     private String firstName;
+    @Column(nullable = true)
     private String lastName;
+    @Column(nullable = true, unique = true)
     private String cpf;
     private LocalDate birthDate;
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE,CascadeType.MERGE})
+    private List<Phone> phones;
 
-    public Person(PersonDTO personDTO) {
-        this.id = personDTO.getId();
-        this.firstName = personDTO.getFirstName();
-        this.lastName = personDTO.getLastName();
-        this.cpf = personDTO.getCpf();
-        this.birthDate = personDTO.getBirthDate();
-    }
-
-    public Person() {
-    }
 }
